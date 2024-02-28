@@ -49,9 +49,9 @@ class Topic(models.Model):
 
 class Room(models.Model):
     name = models.CharField(max_length=100)
-    host = models.OneToOneField(get_user_model(), on_delete=models.SET_NULL, null=True)
+    host = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, null=True)
     topics = models.ForeignKey(Topic, on_delete=models.CASCADE)
-    description = models.CharField(max_length=200, blank=True)
+    description = models.TextField(null=True, blank=True)
     participants = models.ManyToManyField(get_user_model(), related_name='participants', blank=True)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
