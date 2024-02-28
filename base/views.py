@@ -77,7 +77,44 @@ def creat_room(request):
         return redirect('home')
 
     context = {'topics': topics, 'form': form}
-    return render(request, 'base/create-room.html', context)
+    return render(request, 'base/room_form.html', context)
+
+
+@login_required(login_url='login')
+def delete_room(request, pk):
+    room = Room.objects.get(id=pk)
+
+    if request.user != room.host:
+        return HttpResponse('You are not allowed here')
+
+    if request.method == 'POST':
+        room.delete()
+        return redirect('home')
+
+    context = {'obj': room}
+    return render(request, 'base/delete.html', context)
+
+
+@login_required(login_url='login')
+def update_room(request, pk):
+    room = Room.objects.get(id=pk)
+    form = RoomForm(instance=room)
+    topics = Topic.objects.all()
+
+    if request.user != room.host:
+        return HttpResponse('You are not allowed here!')
+
+    if request.method == 'POST':
+        topic_name = request.POST.get('topic')
+        topic, created = Topic.objects.get_or_create(name=topic_name)
+        room.name = request.POST.get('name')
+        room.topics = topic
+        room.description = request.POST.get('description')
+        room.save()
+        return redirect('home')
+
+    context = {'form': form, 'room': room, 'topics': topics}
+    return render(request, 'base/room_form.html', context)
 
 
 def room_page(request, pk):

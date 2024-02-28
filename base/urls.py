@@ -14,6 +14,8 @@ urlpatterns = [
     path('register/', views.register_page, name='register'),
     path('edit-user', views.edit_user, name='edit-user'),
     path('delete-message/<str:pk>', views.delete_message, name='delete-message'),
+    path('delete-room/<str:pk>', views.delete_room, name='delete-room'),
+    path('update-room/<str:pk>', views.update_room, name='update-room'),
 
     path('topics/', views.topics_page, name='topics'),
     path('activity/', views.activity_page, name='activity'),
